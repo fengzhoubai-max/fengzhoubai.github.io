@@ -4,136 +4,87 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0f172a">
-  <title>作品集新增内容预览</title>
+  <title>机电工程主管 | 项目作品集</title>
   <style>
-    html, body { margin: 0; min-height: 100%; background: #0f172a; }
-    iframe { display: block; width: 100%; height: 100vh; border: 0; }
+    body { margin: 0; min-height: 100vh; background: #0f172a; color: #f8fafc; font: 16px/1.7 -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif; }
+    .loading { max-width: 720px; margin: 15vh auto; padding: 24px; color: #94a3b8; }
   </style>
 </head>
 <body>
-  <iframe id="sitePreview" title="保留原网页内容并添加新章节的预览" src="./"></iframe>
+  <p class="loading">正在加载作品集…</p>
   <script>
-    const frame = document.getElementById("sitePreview");
-    frame.addEventListener("load", () => {
-      const page = frame.contentDocument;
-      if (!page || page.getElementById("added-capability-sections")) return;
+    (async () => {
+      const originalUrl = "https://raw.githubusercontent.com/fengzhoubai-max/fengzhoubai.github.io/706eb5b47283c641b32d4ebbd05ef154ed38166e/index.html";
+      try {
+        const response = await fetch(originalUrl);
+        if (!response.ok) throw new Error("页面加载失败");
+        let html = await response.text();
+        const extraStyles = `
+          .added-section { margin: 48px 0; color: var(--text-primary); }
+          .added-heading { display:flex; justify-content:space-between; align-items:end; gap:24px; margin-bottom:20px; }
+          .added-eyebrow { margin:0 0 10px; color:var(--accent-yellow); font-size:12px; font-weight:800; letter-spacing:.16em; }
+          .added-heading h2 { margin:0; color:var(--text-primary); font-size:clamp(24px,3vw,34px); line-height:1.3; }
+          .added-heading>p { max-width:650px; margin:0; color:var(--text-secondary); font-size:15px; }
+          .added-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+          .added-panel,.added-phase,.added-control,.added-keyword { background:var(--bg-card); border:1px solid var(--border-color); border-radius:12px; }
+          .added-panel { padding:clamp(20px,3vw,30px); }
+          .added-panel h3,.added-control h3 { margin:0 0 16px; color:var(--accent-blue); font-size:20px; }
+          .added-copy { margin:0 0 20px; color:var(--text-secondary); font-size:15px; }
+          .added-items { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+          .added-item,.added-note { padding:13px 15px; border:1px solid var(--border-color); border-left:4px solid var(--accent-green); border-radius:8px; background:#0b1222; color:#d3dbe7; }
+          .added-note { margin-top:18px; border-left-color:var(--accent-yellow); color:var(--text-secondary); }
+          .added-phases { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin-bottom:16px; }
+          .added-phase { padding:20px; }
+          .phase-label { color:var(--accent-green); font-size:12px; font-weight:800; letter-spacing:.1em; }
+          .added-phase h3 { margin:10px 0; color:var(--accent-yellow); font-size:18px; }
+          .added-phase p { margin:0; color:var(--text-secondary); font-size:14px; }
+          .added-control { padding:clamp(20px,3vw,30px); }
+          .added-safety { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+          .added-keywords { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; }
+          .added-keyword { padding:18px; }
+          .added-keyword h3 { margin:0 0 8px; color:var(--accent-blue); font-size:16px; }
+          .added-keyword p { margin:0; color:var(--text-secondary); font-size:14px; }
+          @media(max-width:760px){.added-heading{align-items:flex-start;flex-direction:column;gap:8px}.added-grid,.added-phases{grid-template-columns:1fr}.added-keywords{grid-template-columns:1fr 1fr}}
+          @media(max-width:480px){.added-items,.added-safety,.added-keywords{grid-template-columns:1fr}}
+          @media print{.added-panel,.added-phase,.added-control,.added-keyword{break-inside:avoid}}
+        `;
+        html = html.replace("</style>", `${extraStyles}\n    </style>`);
+        html = html.replace('<head>', '<head><base href="https://fengzhoubai-max.github.io/fengzhoubai.github.io/">');
 
-      const style = page.createElement("style");
-      style.id = "added-capability-styles";
-      style.textContent = `
-        .added-section { margin: 48px 0; color: var(--text-primary, #f8fafc); }
-        .added-heading { display: flex; justify-content: space-between; align-items: end; gap: 24px; margin-bottom: 20px; }
-        .added-heading .added-eyebrow { margin: 0 0 10px; color: var(--accent-yellow, #fbbf24); font-size: 12px; font-weight: 800; letter-spacing: .16em; }
-        .added-heading h2 { margin: 0; color: var(--text-primary, #f8fafc); font-size: clamp(24px, 3vw, 34px); line-height: 1.3; }
-        .added-heading > p { max-width: 650px; margin: 0; color: var(--text-secondary, #94a3b8); font-size: 15px; }
-        .added-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-        .added-panel, .added-phase, .added-control, .added-keyword { background: var(--bg-card, #1e293b); border: 1px solid var(--border-color, #334155); border-radius: 12px; }
-        .added-panel { padding: clamp(20px, 3vw, 30px); }
-        .added-panel h3, .added-control h3 { margin: 0 0 16px; color: var(--accent-blue, #38bdf8); font-size: 20px; }
-        .added-copy { margin: 0 0 20px; color: var(--text-secondary, #94a3b8); font-size: 15px; }
-        .added-items { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .added-item, .added-note { padding: 13px 15px; border: 1px solid var(--border-color, #334155); border-left: 4px solid var(--accent-green, #34d399); border-radius: 8px; background: #0b1222; color: #d3dbe7; }
-        .added-note { margin-top: 18px; border-left-color: var(--accent-yellow, #fbbf24); color: var(--text-secondary, #94a3b8); }
-        .added-phases { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-bottom: 16px; }
-        .added-phase { padding: 20px; }
-        .added-phase .phase-label { color: var(--accent-green, #34d399); font-size: 12px; font-weight: 800; letter-spacing: .1em; }
-        .added-phase h3 { margin: 10px 0; color: var(--accent-yellow, #fbbf24); font-size: 18px; }
-        .added-phase p { margin: 0; color: var(--text-secondary, #94a3b8); font-size: 14px; }
-        .added-control { padding: clamp(20px, 3vw, 30px); }
-        .added-safety { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .added-keywords { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
-        .added-keyword { padding: 18px; }
-        .added-keyword h3 { margin: 0 0 8px; color: var(--accent-blue, #38bdf8); font-size: 16px; }
-        .added-keyword p { margin: 0; color: var(--text-secondary, #94a3b8); font-size: 14px; }
-        @media (max-width: 760px) {
-          .added-heading { align-items: start; flex-direction: column; gap: 8px; }
-          .added-grid, .added-phases { grid-template-columns: 1fr; }
-          .added-keywords { grid-template-columns: 1fr 1fr; }
-        }
-        @media (max-width: 480px) {
-          .added-items, .added-safety, .added-keywords { grid-template-columns: 1fr; }
-        }
-      `;
-      page.head.appendChild(style);
-
-      const section = page.createElement("section");
-      section.id = "added-capability-sections";
-      section.innerHTML = `
+        const profile = `
         <section class="added-section" aria-labelledby="added-profile-title">
-          <div class="added-heading">
-            <div><p class="added-eyebrow">PROFILE &amp; CAPABILITIES</p><h2 id="added-profile-title">专业能力概览</h2></div>
-            <p>以现场问题识别为起点，将技术方案、施工组织、安全要求与运营需求结合，推动项目有序实施。</p>
-          </div>
+          <div class="added-heading"><div><p class="added-eyebrow">PROFILE &amp; CAPABILITIES</p><h2 id="added-profile-title">专业能力概览</h2></div><p>以现场问题识别为起点，将技术方案、施工组织、安全要求与运营需求结合，推动项目有序实施。</p></div>
           <div class="added-grid">
-            <article class="added-panel">
-              <h3>工作方向</h3>
-              <p class="added-copy">面向商业物业及停车场等设施场景，参与工程改造与运营保障工作。关注设备运行可靠性、能源使用效率、施工期间现场秩序，以及多专业、多单位之间的协同配合。</p>
-              <div class="added-items">
-                <div class="added-item">工程改造方案梳理与施工计划编排</div>
-                <div class="added-item">机电设施运行、照明及用电管理</div>
-                <div class="added-item">施工单位协调与现场安全检查</div>
-                <div class="added-item">车流组织、岗位安排及应急协同</div>
-              </div>
-            </article>
-            <article class="added-panel">
-              <h3>项目管理方法</h3>
-              <p class="added-copy">以“前期策划—现场准备—过程巡查—节点复核—收尾验收”为主线，明确施工界面、区域顺序、风险控制和责任分工，兼顾工程质量与日常运营需求。</p>
-              <div class="added-note">本作品集依据本次提供的三份项目资料整理，已对公司、客户、供应商、人员及内部区域标识等信息进行匿名化处理。</div>
-            </article>
+            <article class="added-panel"><h3>工作方向</h3><p class="added-copy">面向商业物业及停车场等设施场景，参与工程改造与运营保障工作。关注设备运行可靠性、能源使用效率、施工期间现场秩序，以及多专业、多单位之间的协同配合。</p><div class="added-items"><div class="added-item">工程改造方案梳理与施工计划编排</div><div class="added-item">机电设施运行、照明及用电管理</div><div class="added-item">施工单位协调与现场安全检查</div><div class="added-item">车流组织、岗位安排及应急协同</div></div></article>
+            <article class="added-panel"><h3>项目管理方法</h3><p class="added-copy">以“前期策划—现场准备—过程巡查—节点复核—收尾验收”为主线，明确施工界面、区域顺序、风险控制和责任分工，兼顾工程质量与日常运营需求。</p><div class="added-note">本作品集依据本次提供的三份项目资料整理，已对公司、客户、供应商、人员及内部区域标识等信息进行匿名化处理。</div></article>
           </div>
-        </section>
+        </section>`;
+        html = html.replace('        <!-- 筛选与标题栏 -->', `${profile}\n\n        <!-- 筛选与标题栏 -->`);
 
+        const bottomSections = `
         <section class="added-section" aria-labelledby="added-control-title">
-          <div class="added-heading">
-            <div><p class="added-eyebrow">PROJECT CONTROL</p><h2 id="added-control-title">工程现场管理闭环</h2></div>
-            <p>将施工计划、安全要求、运营协调和现场检查纳入同一套管理流程。</p>
-          </div>
+          <div class="added-heading"><div><p class="added-eyebrow">PROJECT CONTROL</p><h2 id="added-control-title">工程现场管理闭环</h2></div><p>将施工计划、安全要求、运营协调和现场检查纳入同一套管理流程。</p></div>
           <div class="added-phases">
             <article class="added-phase"><div class="phase-label">01 / PREPARATION</div><h3>施工前策划</h3><p>施工备案、方案沟通、施工筹备、施工界面确认、分区计划编排及相关运营通知。</p></article>
             <article class="added-phase"><div class="phase-label">02 / EXECUTION</div><h3>过程管控</h3><p>现场围挡及成品保护、临时用电和消防检查、施工巡查、区域交通疏导及交叉作业协调。</p></article>
             <article class="added-phase"><div class="phase-label">03 / CLOSE-OUT</div><h3>收尾与验收</h3><p>每日工完场清、问题整改跟进、分区复核、施工资料整理及竣工验收配合。</p></article>
           </div>
-          <article class="added-control">
-            <h3>现场安全与运营协同要点</h3>
-            <div class="added-safety">
-              <div class="added-item">施工人员按要求佩戴安全帽、反光衣等防护用品</div>
-              <div class="added-item">临时配电箱检查过载、短路及漏电保护功能</div>
-              <div class="added-item">按施工方案配置消防器材，动火作业提前报备</div>
-              <div class="added-item">施工现场按要求巡查，收工前完成安全检查</div>
-              <div class="added-item">施工垃圾日产日清，做好围挡及成品保护</div>
-              <div class="added-item">夜间油漆作业后延长排风，降低对运营影响</div>
-            </div>
-          </article>
+          <article class="added-control"><h3>现场安全与运营协同要点</h3><div class="added-safety"><div class="added-item">施工人员按要求佩戴安全帽、反光衣等防护用品</div><div class="added-item">临时配电箱检查过载、短路及漏电保护功能</div><div class="added-item">按施工方案配置消防器材，动火作业提前报备</div><div class="added-item">施工现场按要求巡查，收工前完成安全检查</div><div class="added-item">施工垃圾日产日清，做好围挡及成品保护</div><div class="added-item">夜间油漆作业后延长排风，降低对运营影响</div></div></article>
         </section>
-
         <section class="added-section" aria-labelledby="added-keywords-title">
-          <div class="added-heading">
-            <div><p class="added-eyebrow">CORE CAPABILITIES</p><h2 id="added-keywords-title">能力关键词</h2></div>
-            <p>根据三份项目资料中体现的工作内容归纳，不将未提供或无法核实的资质、业绩写入网页。</p>
-          </div>
-          <div class="added-keywords">
-            <article class="added-keyword"><h3>机电与照明系统</h3><p>照明改造、智能控制、运行状态及能耗管理</p></article>
-            <article class="added-keyword"><h3>工程施工管理</h3><p>施工计划、界面协调、分区组织与进度跟进</p></article>
-            <article class="added-keyword"><h3>安全风险控制</h3><p>临时用电、消防器材、动火报备与现场巡查</p></article>
-            <article class="added-keyword"><h3>运营协同</h3><p>交通组织、标识优化、岗位安排及动态调度</p></article>
-          </div>
+          <div class="added-heading"><div><p class="added-eyebrow">CORE CAPABILITIES</p><h2 id="added-keywords-title">能力关键词</h2></div><p>根据三份项目资料中体现的工作内容归纳，不将未提供或无法核实的资质、业绩写入网页。</p></div>
+          <div class="added-keywords"><article class="added-keyword"><h3>机电与照明系统</h3><p>照明改造、智能控制、运行状态及能耗管理</p></article><article class="added-keyword"><h3>工程施工管理</h3><p>施工计划、界面协调、分区组织与进度跟进</p></article><article class="added-keyword"><h3>安全风险控制</h3><p>临时用电、消防器材、动火报备与现场巡查</p></article><article class="added-keyword"><h3>运营协同</h3><p>交通组织、标识优化、岗位安排及动态调度</p></article></div>
           <div class="added-note">数据口径说明：地坪工程数量为原方案计划量，不等同于最终结算或验收工程量；坡道交通组织阈值为原方案设定的动态开放策略。</div>
-        </section>
-      `;
-
-      const projectsTitle = page.querySelector(".filter-section");
-      const grid = page.querySelector("#projectsGrid");
-      const originalContainer = grid && grid.parentElement;
-      if (projectsTitle && originalContainer) originalContainer.insertBefore(section.querySelector(".added-section"), projectsTitle);
-      if (originalContainer) {
-        section.querySelectorAll(".added-section").forEach((item, index) => {
-          if (index > 0) originalContainer.appendChild(item);
-        });
+        </section>`;
+        html = html.replace('    <!-- 详情弹窗 Modal -->', `${bottomSections}\n\n    <!-- 详情弹窗 Modal -->`);
+        if (!html.includes('added-profile-title') || !html.includes('added-control-title') || !html.includes('added-keywords-title')) throw new Error("无法插入新增内容");
+        document.open();
+        document.write(html);
+        document.close();
+      } catch (error) {
+        document.body.innerHTML = '<p class="loading">作品集加载失败，请刷新页面重试。</p>';
       }
-      const resize = () => { frame.style.height = `${page.documentElement.scrollHeight}px`; };
-      resize();
-      new ResizeObserver(resize).observe(page.documentElement);
-    });
+    })();
   </script>
 </body>
 </html>
