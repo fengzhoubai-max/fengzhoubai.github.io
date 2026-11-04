@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f2f1eb">
+    <meta name="description" content="李家能的机电工程与工程管理项目作品集。">
+    <title>李家能 | 机电工程与项目管理</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --paper: #f2f1eb;
+            --surface: #fbfaf6;
+            --ink: #202522;
+            --muted: #68716d;
+            --line: #d7d9d1;
+            --green: #245c4b;
+            --green-soft: #dce8df;
+            --orange: #c85c35;
+            --yellow: #e8ba52;
+            --serif: "Iowan Old Style", "Noto Serif SC", "Songti SC", Georgia, serif;
+            --sans: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+        }
+
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); line-height: 1.65; }
+        button, a { font: inherit; }
+        button { color: inherit; }
+        a { color: inherit; }
+        .shell { width: min(1240px, calc(100% - 64px)); margin-inline: auto; }
+
+        .topline { display: flex; justify-content: space-between; align-items: center; padding: 22px 0; border-bottom: 1px solid var(--line); font-size: 12px; letter-spacing: .08em; color: var(--muted); }
+        .topline-mark { display: flex; align-items: center; gap: 10px; color: var(--green); font-weight: 700; }
+        .mark-dot { width: 9px; height: 9px; background: var(--orange); border-radius: 50%; }
+        .topline a { text-decoration: none; border-bottom: 1px solid var(--green); color: var(--green); }
+
+        .hero { display: grid; grid-template-columns: 1.04fr .96fr; min-height: 490px; margin: 28px 0 52px; background: var(--green); color: #f7f5ef; overflow: hidden; }
+        .hero-copy { display: flex; flex-direction: column; justify-content: center; padding: clamp(32px, 6vw, 78px); }
+        .eyebrow { margin: 0 0 20px; color: #c2d6c9; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; }
+        .hero h1 { margin: 0; font-family: var(--serif); font-size: clamp(48px, 6vw, 82px); font-weight: 500; line-height: 1.12; }
+        .hero-role { margin: 17px 0 0; font-size: 18px; color: #d7e2da; }
+        .hero-intro { max-width: 470px; margin: 26px 0 0; color: #c2d6c9; font-size: 14px; }
+        .hero-meta { display: flex; flex-wrap: wrap; gap: 9px 22px; margin-top: 30px; color: #f0eee5; font-size: 13px; }
+        .hero-meta span { white-space: nowrap; }
+        .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
+        .action { min-height: 44px; padding: 9px 16px; border: 1px solid #9db9a7; background: transparent; color: #fff; text-decoration: none; cursor: pointer; }
+        .action-primary { border-color: var(--yellow); background: var(--yellow); color: var(--ink); font-weight: 700; }
+        .hero-photo { position: relative; min-height: 360px; background: #394b42; }
+        .hero-photo img { width: 100%; height: 100%; min-height: 360px; display: block; object-fit: cover; filter: saturate(.72); }
+        .photo-caption { position: absolute; right: 18px; bottom: 18px; padding: 7px 10px; background: rgba(25, 34, 29, .82); color: #f7f5ef; font-size: 11px; }
+
+        .credentials { display: flex; flex-wrap: wrap; gap: 8px; padding: 18px 0 0; border-top: 1px solid var(--line); }
+        .credential { padding: 5px 10px; border: 1px solid #bbc9bd; color: var(--green); font-size: 12px; }
+
+        .metrics { display: grid; grid-template-columns: repeat(4, 1fr); margin: 48px 0 72px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+        .metric { min-height: 135px; padding: 23px 20px 20px 0; }
+        .metric + .metric { padding-left: 24px; border-left: 1px solid var(--line); }
+        .metric-value { font-family: var(--serif); font-size: 34px; line-height: 1.2; color: var(--green); }
+        .metric:nth-child(2) .metric-value { color: var(--orange); }
+        .metric:nth-child(3) .metric-value { color: #92701e; }
+        .metric-label { margin-top: 8px; color: var(--muted); font-size: 13px; }
+
+        .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 20px; }
+        .section-kicker { margin: 0 0 5px; color: var(--orange); font-size: 11px; letter-spacing: .14em; }
+        .section-heading h2 { margin: 0; font-family: var(--serif); font-size: 34px; font-weight: 500; line-height: 1.25; }
+        .project-count { color: var(--muted); font-size: 13px; white-space: nowrap; }
+        .filter-bar { display: flex; flex-wrap: wrap; gap: 8px; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+        .filter-button { min-height: 38px; padding: 7px 13px; border: 1px solid var(--line); background: transparent; font-size: 13px; cursor: pointer; transition: background-color .18s ease, color .18s ease, border-color .18s ease; }
+        .filter-button:hover { border-color: var(--green); }
+        .filter-button[aria-pressed="true"] { border-color: var(--green); background: var(--green); color: #fff; }
+
+        .projects { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 30px; }
+        .project { display: flex; flex-direction: column; min-height: 260px; padding: 24px 0; border-bottom: 1px solid var(--line); animation: rise-in .35s ease both; }
+        .project-top { display: flex; justify-content: space-between; gap: 16px; color: var(--muted); font-size: 12px; }
+        .project-category { color: var(--orange); font-weight: 700; }
+        .project h3 { margin: 14px 0 8px; font-family: var(--serif); font-size: 23px; font-weight: 500; line-height: 1.4; }
+        .project p { margin: 0; color: var(--muted); font-size: 13px; }
+        .project-result { margin-top: auto; padding: 14px 0 0; color: var(--green); font-size: 13px; font-weight: 700; }
+        .project-more { align-self: flex-start; margin-top: 14px; padding: 0 0 3px; border: 0; border-bottom: 1px solid var(--green); background: transparent; color: var(--green); font-size: 12px; cursor: pointer; }
+        .project-more:hover { color: var(--orange); border-color: var(--orange); }
+        .empty-state { grid-column: 1 / -1; padding: 42px 0; color: var(--muted); }
+
+        .closing { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 25px; margin: 72px 0 40px; padding: 28px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+        .closing h2 { margin: 0; font-family: var(--serif); font-size: 26px; font-weight: 500; }
+        .closing p { margin: 5px 0 0; color: var(--muted); font-size: 13px; }
+        .closing a { padding: 10px 15px; background: var(--orange); color: white; text-decoration: none; font-size: 13px; }
+        footer { display: flex; justify-content: space-between; gap: 16px; padding: 0 0 25px; color: var(--muted); font-size: 11px; }
+
+        dialog { width: min(760px, calc(100% - 32px)); max-width: none; max-height: min(86vh, 900px); padding: 0; border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
+        dialog::backdrop { background: rgba(24, 32, 27, .7); }
+        .dialog-inner { padding: clamp(22px, 5vw, 42px); }
+        .dialog-top { display: flex; justify-content: space-between; align-items: start; gap: 20px; }
+        .dialog-title { margin: 0; font-family: var(--serif); font-size: 28px; font-weight: 500; line-height: 1.4; }
+        .dialog-close { flex: 0 0 38px; width: 38px; height: 38px; border: 1px solid var(--line); background: transparent; font-size: 22px; cursor: pointer; }
+        .dialog-meta { margin: 8px 0 26px; color: var(--muted); font-size: 12px; }
+        .detail-section { margin-top: 21px; }
+        .detail-section h3 { margin: 0 0 9px; padding-bottom: 7px; border-bottom: 1px solid var(--line); color: var(--green); font-size: 13px; }
+        .detail-section p, .detail-section li { color: var(--muted); font-size: 13px; }
+        .detail-section p { margin: 0; }
+        .detail-section ul { margin: 0; padding-left: 20px; }
+        .detail-section li + li { margin-top: 6px; }
+
+        @keyframes rise-in { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
+        @media (max-width: 760px) {
+            .shell { width: min(100% - 36px, 600px); }
+            .topline { padding: 16px 0; }
+            .hero { grid-template-columns: 1fr; margin-top: 18px; }
+            .hero-copy { padding: 36px 26px; }
+            .hero-photo { min-height: 230px; }
+            .hero-photo img { min-height: 230px; max-height: 300px; }
+            .metrics { grid-template-columns: repeat(2, 1fr); margin: 38px 0 55px; }
+            .metric { min-height: 116px; padding: 18px 12px 16px 0; }
+            .metric + .metric { padding-left: 14px; }
+            .metric:nth-child(3) { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); }
+            .metric:nth-child(4) { border-top: 1px solid var(--line); }
+            .metric-value { font-size: 29px; }
+            .section-heading { align-items: start; flex-direction: column; gap: 8px; }
+            .section-heading h2 { font-size: 29px; }
+            .projects { grid-template-columns: 1fr; }
+            .project { min-height: 230px; }
+            .closing { grid-template-columns: 1fr; }
+            .closing a { justify-self: start; }
+        }
+        @media (max-width: 420px) {
+            .shell { width: calc(100% - 28px); }
+            .topline { font-size: 10px; }
+            .hero h1 { font-size: 50px; }
+            .hero-role { font-size: 16px; }
+            .hero-meta { gap: 7px 15px; }
+            .filter-bar { gap: 6px; }
+            .filter-button { padding-inline: 9px; font-size: 12px; }
+            .project-top { flex-direction: column; gap: 3px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+        }
+        @media print {
+            :root { --paper: #fff; --surface: #fff; --ink: #111; --muted: #444; --line: #bbb; --green: #245c4b; }
+            body { background: #fff; }
+            .shell { width: 100%; }
+            .topline, .hero-actions, .filter-bar, .project-more, .closing a, dialog { display: none !important; }
+            .hero { min-height: 0; margin: 0 0 20px; background: #245c4b !important; print-color-adjust: exact; }
+            .hero-copy { padding: 30px; }
+            .hero-photo { min-height: 210px; }
+            .hero-photo img { min-height: 210px; }
+            .metrics { margin: 20px 0 28px; }
+            .projects { grid-template-columns: repeat(2, 1fr); gap: 0 20px; }
+            .project { min-height: 0; break-inside: avoid; animation: none; }
+            .closing { margin-top: 28px; }
+            footer { padding-bottom: 0; }
+        }
+    </style>
+</head>
+<body>
+    <main class="shell">
+        <div class="topline">
+            <div class="topline-mark"><span class="mark-dot" aria-hidden="true"></span>工程项目作品集</div>
+            <a href="#projects">浏览项目 <span aria-hidden="true">↓</span></a>
+        </div>
+
+        <section class="hero" aria-labelledby="profile-name">
+            <div class="hero-copy">
+                <p class="eyebrow">MEP ENGINEERING · PROJECT MANAGEMENT</p>
+                <h1 id="profile-name">李家能</h1>
+                <p class="hero-role">机电工程师 <span aria-hidden="true">/</span> 工程主管</p>
+                <p class="hero-intro">专注停车场机电运维、节能改造与工程现场管理。以可验证的数据改善能耗、施工质量与运营安全。</p>
+                <div class="hero-meta">
+                    <span>深圳 · 随时到岗</span>
+                    <span>期望薪资 12k–14k</span>
+                    <span>通信工程 · 本科</span>
+                </div>
+                <div class="hero-actions">
+                    <a class="action action-primary" href="mailto:1919439482@qq.com">联系我</a>
+                    <button class="action" type="button" id="printButton">打印 / 导出 PDF</button>
+                </div>
+            </div>
+            <div class="hero-photo">
+                <img src="https://images.unsplash.com/photo-1506521781263-d8422e82f27a?auto=format&amp;fit=crop&amp;w=1400&amp;q=85" alt="现代停车场的车辆与停车区域" fetchpriority="high">
+                <span class="photo-caption">停车场工程与运营现场</span>
+            </div>
+        </section>
+
+        <section class="credentials" aria-label="资质与专业能力">
+            <span class="credential">低压电工操作证</span>
+            <span class="credential">高空作业操作证</span>
+            <span class="credential">安全生产管理人员证</span>
+            <span class="credential">安全总监证</span>
+            <span class="credential">标准化工程运维</span>
+            <span class="credential">多项目跨域统筹</span>
+        </section>
+
+        <section class="metrics" aria-label="项目成果概览">
+            <div class="metric"><div class="metric-value">82.29%</div><div class="metric-label">智能照明年改造节能率</div></div>
+            <div class="metric"><div class="metric-value">91 万+</div><div class="metric-label">挽回损耗与节省费用总额</div></div>
+            <div class="metric"><div class="metric-value">100%</div><div class="metric-label">安全隐患整改完成率</div></div>
+            <div class="metric"><div class="metric-value">0 事故</div><div class="metric-label">台风防汛与突发故障应对</div></div>
+        </section>
+
+        <section id="projects" aria-labelledby="projects-title">
+            <div class="section-heading">
+                <div><p class="section-kicker">SELECTED WORK · 2024—2026</p><h2 id="projects-title">重点项目</h2></div>
+                <span class="project-count" id="projectCount" aria-live="polite"></span>
+            </div>
+            <div class="filter-bar" role="group" aria-label="按项目类型筛选">
+                <button class="filter-button" type="button" data-filter="all" aria-pressed="true">全部项目</button>
+                <button class="filter-button" type="button" data-filter="smart" aria-pressed="false">智能改造与节能</button>
+                <button class="filter-button" type="button" data-filter="construction" aria-pressed="false">工程施工与修复</button>
+                <button class="filter-button" type="button" data-filter="energy" aria-pressed="false">能耗审计排查</button>
+                <button class="filter-button" type="button" data-filter="emergency" aria-pressed="false">应急处置与 SOP</button>
+            </div>
+            <div class="projects" id="projectsGrid" aria-live="polite"></div>
+        </section>
+
+        <section class="closing" aria-label="联系方式">
+            <div><h2>期待交流工程管理与机电运维经验</h2><p>电话：19164054324　·　邮箱：1919439482@qq.com</p></div>
+            <a href="mailto:1919439482@qq.com">发送邮件</a>
+        </section>
+        <footer><span>李家能 · 机电工程与项目管理</span><span>桂林电子科技大学 · 通信工程本科</span></footer>
+    </main>
+
+    <dialog id="projectDialog" aria-labelledby="dialogTitle">
+        <div class="dialog-inner" id="dialogContent"></div>
+    </dialog>
+
+    <script>
+        const projects = [
+            {
+                id: "p1", category: "smart", categoryLabel: "智能改造与节能", date: "2024.06–2024.10", role: "工程主管",
+                title: "深圳联想后海中心停车场智能照明改造",
+                desc: "采用物联网高光效智能灯具替代传统 T8 灯管，通过雷达感应与云平台实现能耗优化及数字化管理。",
+                highlights: "年节能率 82.29%，年节省电费约 10.3 万元。",
+                background: "现有灯具能耗较高（日均耗电 7.08 kWh），需在保障基础照明的同时实现节能降本。",
+                duties: ["方案设计与选型：选定 5.8G 雷达感应智能灯管，制定分时段情景模式。", "施工管理：协调团队完成 688 支灯具逐支更换，优化 Mesh 网络覆盖及云平台部署。", "调试优化：远程调整感应灵敏度与延时时间，解决感应盲区。", "效果验证：输出能耗报告，项目方案被纳入深圳市既有建筑节能改造导则编制参考。"],
+                results: ["改造后年能耗从 96,430 kWh 降至 17,076 kWh，节能率 82.29%。", "年节省电费约 10.3 万元，5 年累计预计节省超 51 万元。", "实现分区控制与能耗实时监控，成为区域智能照明改造标杆。"]
+            },
+            {
+                id: "p2", category: "energy", categoryLabel: "能耗审计排查", date: "2024.04–2024.11", role: "工程主管",
+                title: "坪山创新广场停车场能耗专项排查",
+                desc: "主导能耗专项排查，规范能源使用，重点核查物业方及商铺擅自接用停车场电量的行为。",
+                highlights: "核定违规用电 32.3 万度，追回及节省费用近 40 万元。",
+                background: "停车场用电成本异常，需排查未授权接电及违规用电情况，挽回经济损失。",
+                duties: ["联合工程团队开展为期 5 个月的排查，覆盖电力线路与电表设备。", "重点核查风机房、维保值班室、排风机房、垃圾房等关键线路。", "系统梳理 31 个月的电量历史数据，结合独立电表完成计量统计。", "制定整改措施，包括规范用电协议及建立长效能耗监管制度。"],
+                results: ["核定擅自使用电量 323,157.4 度，追回电费共计 387,788.88 元。", "为项目能源管理提供真实数据支撑，建立供电长效监管机制。", "形成可复制推行的能耗排查标准化流程。"]
+            },
+            {
+                id: "p3", category: "construction", categoryLabel: "工程施工与修复", date: "2025.04–2025.06", role: "工程主管",
+                title: "深圳联想后海中心车库地坪及附属设施修复",
+                desc: "完成地下车库 8 个区域地坪裂缝修复、墙身与天花涂料修复及交通标线施划。",
+                highlights: "裂缝修复率 100%，全程施工零安全事故。",
+                background: "地下三、四层共 8 个区域设施老化开裂，需在不停业、避免交叉作业的前提下分区施工。",
+                duties: ["制定全流程方案，协调 2 家施工单位分区域交叉避让作业。", "落实安全标准：反光衣、安全帽、每 50 平方米配备 5 kg 灭火器、动火报备制。", "严格质量验收：执行 V 字口填补及三遍耐磨面漆工艺。"],
+                results: ["所有区域按期交付，地坪裂缝修复率 100%。", "涂料颜色肌理与原设计一致，标线施划精准耐磨。", "施工全周期保持零安全事故，获物业方认可。"]
+            },
+            {
+                id: "p4", category: "smart", categoryLabel: "智能改造与节能", date: "2026.01–2026.02", role: "工程主管",
+                title: "深圳联想后海中心停车场使用体验提升",
+                desc: "系统诊断并优化照明、标识与服务流程，规划智能灯光调节及午休专区等服务。",
+                highlights: "形成 AI 自动巡检机制构想，拓展停车增值服务场景。",
+                background: "提升地下停车场综合服务品质与车主体验，并挖掘潜在增收点。",
+                duties: ["主导现场调研，梳理视觉、听觉、触觉痛点并制定整改计划。", "统筹物业、维保及机电施工三方协作，建立标准化接口流程。", "分析停车行为数据，规划高峰车位扩展及午休关怀专区增值方案。"],
+                results: ["形成系统问题清单与标准化整改流程，改善环境品质。", "通过动态车位与智能灯光方案提升能效与潜在服务收入。", "推动基于 AI 摄像头的智能自动巡检长效机制。"]
+            },
+            {
+                id: "p5", category: "emergency", categoryLabel: "应急处置与 SOP", date: "突发事件处置", role: "工程主管",
+                title: "道闸设备瘫痪紧急处置",
+                desc: "道闸服务器突发离线导致系统瘫痪，第一时间疏导交通并完成系统抢修。",
+                highlights: "30 分钟内恢复系统，形成道闸应急处理 SOP。",
+                background: "服务器离线导致车辆出入受阻，易引发场内拥堵及用户投诉。",
+                duties: ["现场应急指挥：报备领导并调度人员现场人工引导秩序。", "技术支持对接：协调设备厂家建立远程支持通道，排查网络及电源故障。", "经验复盘：梳理处理步骤，提炼标准化应急流程。"],
+                results: ["30 分钟内恢复道闸正常运行，未引发长时间拥堵。", "现场秩序稳定，实现零安全事故与零用户投诉。", "输出标准化道闸设备应急处理 SOP。"]
+            },
+            {
+                id: "p6", category: "emergency", categoryLabel: "应急处置与 SOP", date: "日常防御与汛期应对", role: "工程主管",
+                title: "汛期与台风极端天气应急处置",
+                desc: "主导多个停车场防汛及台风应急处置，保障设施安全、运营连续性及人员车辆安全。",
+                highlights: "设备零损坏、人员零伤亡、车辆零被淹，降损约 15 万元。",
+                background: "极端天气易导致地库倒灌、设备浸水损坏及重大财产损失。",
+                duties: ["排查防汛薄弱点，制定《极端天气应急预案》并组织 3 次实操演练。", "台风期间 24 小时驻场指挥，协调水泵防汛、沙袋布设及设备断电保护。", "推动设施加固：安装入口挡水板、通风口防雨改造及电控柜防水升级。"],
+                results: ["成功应对 2 次台风及 3 次强降雨，实现设备零损坏、人员零伤亡、车辆零被淹。", "建立预警、响应、复盘闭环流程，形成可复用应急手册。", "减少设施潜在维修费用约 15 万元。"]
+            }
+        ];
+
+        const projectsGrid = document.querySelector("#projectsGrid");
+        const projectCount = document.querySelector("#projectCount");
+        const projectDialog = document.querySelector("#projectDialog");
+        const dialogContent = document.querySelector("#dialogContent");
+        const escapeHTML = (value) => String(value).replace(/[&<>"']/g, (character) => ({
+            "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;"
+        })[character]);
+
+        function renderProjects(category = "all") {
+            const visibleProjects = category === "all" ? projects : projects.filter((project) => project.category === category);
+            projectsGrid.innerHTML = visibleProjects.map((project, index) => `
+                <article class="project" style="animation-delay:${index * 45}ms">
+                    <div class="project-top"><span class="project-category">${escapeHTML(project.categoryLabel)}</span><span>${escapeHTML(project.date)} · ${escapeHTML(project.role)}</span></div>
+                    <h3>${escapeHTML(project.title)}</h3>
+                    <p>${escapeHTML(project.desc)}</p>
+                    <div class="project-result">${escapeHTML(project.highlights)}</div>
+                    <button class="project-more" type="button" data-project="${escapeHTML(project.id)}" aria-label="查看项目详情：${escapeHTML(project.title)}">查看项目详情 <span aria-hidden="true">→</span></button>
+                </article>
+            `).join("") || '<p class="empty-state">当前分类暂无项目。</p>';
+            projectCount.textContent = `显示 ${visibleProjects.length} / ${projects.length} 个项目`;
+        }
+
+        function openProject(project) {
+            const list = (items) => `<ul>${items.map((item) => `<li>${escapeHTML(item)}</li>`).join("")}</ul>`;
+            dialogContent.innerHTML = `
+                <div class="dialog-top"><h2 class="dialog-title" id="dialogTitle">${escapeHTML(project.title)}</h2><button class="dialog-close" type="button" aria-label="关闭项目详情">×</button></div>
+                <p class="dialog-meta">${escapeHTML(project.date)} · ${escapeHTML(project.role)} · ${escapeHTML(project.categoryLabel)}</p>
+                <section class="detail-section"><h3>项目背景</h3><p>${escapeHTML(project.background)}</p></section>
+                <section class="detail-section"><h3>职责与解决方案</h3>${list(project.duties)}</section>
+                <section class="detail-section"><h3>量化成果</h3>${list(project.results)}</section>
+            `;
+            projectDialog.showModal();
+            dialogContent.querySelector(".dialog-close").focus();
+        }
+
+        document.querySelector(".filter-bar").addEventListener("click", (event) => {
+            const button = event.target.closest("[data-filter]");
+            if (!button) return;
+            document.querySelectorAll("[data-filter]").forEach((filterButton) => {
+                filterButton.setAttribute("aria-pressed", String(filterButton === button));
+            });
+            renderProjects(button.dataset.filter);
+        });
+
+        projectsGrid.addEventListener("click", (event) => {
+            const button = event.target.closest("[data-project]");
+            if (!button) return;
+            const project = projects.find((item) => item.id === button.dataset.project);
+            if (project) openProject(project);
+        });
+
+        dialogContent.addEventListener("click", (event) => {
+            if (event.target.closest(".dialog-close")) projectDialog.close();
+        });
+        projectDialog.addEventListener("click", (event) => {
+            if (event.target === projectDialog) projectDialog.close();
+        });
+        document.querySelector("#printButton").addEventListener("click", () => window.print());
+        renderProjects();
+    </script>
+</body>
+</html>
